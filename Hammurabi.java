@@ -107,21 +107,21 @@ public class Hammurabi {
 
   public int askHowManyAcresToPlant(int acresOwned, int population, int bushels) {
     int acresToPlant = getNumber("How many acres would you like to plant grain with? \n");
-    while (acresToPlant / 10 > population) { // each person can only plant 10 bushels, so you would need 10 people for each acre. not sure if this is sound
-      getNumber("We simply do not have enough people for that.");
+    while ((acresToPlant / 10) > population) { // each person can only plant 10 bushels, so you would need 10 people for each acre. not sure if this is sound
+      acresToPlant = getNumber("We simply do not have enough people for that.");
     }
     while (acresToPlant > acresOwned) { // you can't plant more acres than acres you have. also not sure if this is sound
-      getNumber("We simply do not have enough acres for that.");
+      acresToPlant = getNumber("We simply do not have enough acres for that.");
     }
     while (acresToPlant > bushels) { // you can't plant more bushels than bushels you have.
-      getNumber("We simply do not have enough bushels for that.");
+      acresToPlant = getNumber("We simply do not have enough bushels for that.");
     }
 
     return acresToPlant;
   }
-// trey bruton
+
   // METHODS THAT REQUIRE MATH
-  public int addedLand (int lastYearLand, int purchasedLand) {
+  public int addedLand (int lastYearLand, int purchasedLand) { // this and the one below it run the input against what last year's land total was
     return lastYearLand + purchasedLand;
   }
 
