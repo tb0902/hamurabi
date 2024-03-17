@@ -14,6 +14,8 @@ public class Hammurabi {
   int price;
   int year;
   int landValue;
+  int deadPeople;
+  int starvedPeople;
 
 
   public static void main(String[] args) {
@@ -26,6 +28,8 @@ public class Hammurabi {
     bushels = 2800;
     land = 1000;
     landValue = 19;
+    deadPeople = 0;
+    starvedPeople = 0;
   }
 
  boolean gameOver() {
@@ -59,6 +63,9 @@ public class Hammurabi {
       // Assuming you would like to plant bushels,
       int bushelsToPLant = askHowManyAcresToPlant(land, population, bushels);
       bushels -= bushelsToPLant; // bushels must also decrease at this rate
+
+      // If the plague happens,
+      int deadPeople = plagueDeaths();
 
 
       year++; // year will increase when all of these methods are done
@@ -137,16 +144,23 @@ public class Hammurabi {
     System.out.println("The population is now " + population + " .");
     // System.out.println("We harvested " + harvest + " at " + bushelsPerAcre + " bushels per acre.");
    // System.out.println("Rats destroyed); do this when you get here
-    // System.out.println("The plague has killed "); do this when you get here
+    System.out.println("The plague has killed " + deadPeople + " people.");
     System.out.println("The city now owns " + land + " acres of land.");
     System.out.println("The land is worth " + newCostOfLand() + "per acre.");
   }
 
 
 
- /* public int plagueDeaths(int i) {
-    return i;
-  } */
+  public int plagueDeaths() {
+    int deathChance = rand.nextInt(0, 100);
+    if (deathChance < 15) {
+      population = population / 2;
+      deadPeople = population;
+    } else {
+      deadPeople = 0;
+    }
+    return deadPeople;
+  }
 
   public int starvationDeaths(int i, int i1) {
     return i;
