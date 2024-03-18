@@ -5,38 +5,39 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-/* public class HammurabiTest {
-    
-    Hammurabi ham;
-    
-    boolean about(double expected, double actual) {
-        return actual > 0.90 * expected && actual < 1.10 * expected;
-    }
+ public class HammurabiTest {
 
-    @Before
-    public void setUp() throws Exception {
-        ham = new Hammurabi();
-    }
+   Hammurabi ham;
 
-    @Test
-    public final void testPlagueDeaths1() {
-        int number_of_plagues = 0;
-        for (int i = 0; i < 10000; i++) {
-            int deaths = ham.plagueDeaths(100);
-            if (deaths > 0) {
-                number_of_plagues += 1;
-            }
-        }
-        int percentPlagues = number_of_plagues / 100;
-        assertTrue("Number of plagues is about " + percentPlagues + ", not about 15%.",
-                   about(1500, number_of_plagues));
-    }
+   boolean about(double expected, double actual) {
+     return actual > 0.90 * expected && actual < 1.10 * expected;
+   }
+
+   @Before
+   public void setUp() throws Exception {
+     ham = new Hammurabi();
+   }
+
+   @Test
+   public final void testPlagueDeaths1() {
+     int number_of_plagues = 0;
+     for (int i = 0; i < 10000; i++) {
+       int deaths = ham.plagueDeaths();
+       if (deaths > 0) {
+         number_of_plagues += 1;
+       }
+     }
+     int percentPlagues = number_of_plagues / 100;
+     assertTrue("Number of plagues is about " + percentPlagues + ", not about 15%.",
+       about(1500, number_of_plagues));
+   }
+
 
     @Test
     public final void testPlagueDeaths2() {
         int deaths = 0;
         for (int i = 0; i < 10000; i++) {
-            deaths = ham.plagueDeaths(100);
+            deaths = ham.plagueDeaths();
             if (deaths > 0) break;
         }
         assertEquals("In a plague, " + deaths + "% of your people die, not 50%.",
@@ -45,9 +46,9 @@ import org.junit.Test;
     
     @Test
     public final void testStarvationDeaths() {
-        int deaths = ham.starvationDeaths(100, 1639);
+        int deaths = ham.starvationDeaths();
         assertEquals("Wrong number of starvations deaths.", 19, deaths);
-        deaths = ham.starvationDeaths(100, 2500);
+        deaths = ham.starvationDeaths();
         if (deaths < 0) {
             fail("You starved a negative number of people!");
         }
@@ -55,13 +56,13 @@ import org.junit.Test;
 
     @Test
     public final void testUprising() {
-        assertTrue("Should have had an uprising!", ham.uprising(1000, 451));
-        assertFalse("Should not have had an uprising!", ham.uprising(1000, 449));
+        assertTrue("Should have had an uprising!", ham.uprising());
+        assertFalse("Should not have had an uprising!", ham.uprising());
     }
 
     @Test
     public final void testImmigrants() {
-        int imm = ham.immigrants(10, 1200, 500);
+        int imm = ham.immigrants();
         assertEquals("Wrong number of immigrants.", 25, imm);
     }
 
@@ -82,7 +83,7 @@ import org.junit.Test;
     public final void testGrainEatenByRats1() {
         int infestations = 0;
         for (int i = 0; i < 1000; i++) {
-            int eaten = ham.grainEatenByRats(100);
+            int eaten = ham.grainEatenByRats();
             if (eaten > 0) {
                 infestations += 1;
             }
@@ -97,7 +98,7 @@ import org.junit.Test;
         int percent = 0;
         int[] counts = new int[31];
         for (int i = 0; i < 10000; i++) {
-            percent = ham.grainEatenByRats(100);
+            percent = ham.grainEatenByRats();
             if (percent == 0) continue;
             counts[percent] += 1;
             assertTrue("Rats ate " + percent + "% of your grain, not 10% to 30%.",
@@ -123,4 +124,3 @@ import org.junit.Test;
 
 }
 
-*/

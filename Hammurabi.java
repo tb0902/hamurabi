@@ -11,11 +11,18 @@ public class Hammurabi {
   int population;
   int bushels;
   int land;
-  int price;
   int year;
   int landValue;
   int deadPeople;
   int starvedPeople;
+  int feedBushels;
+  int newPeople;
+  boolean uprising;
+  int totalHarvested;
+  int harvestPerAcre;
+  int eatenBushels;
+  boolean gameOver;
+
 
 
   public static void main(String[] args) {
@@ -30,19 +37,26 @@ public class Hammurabi {
     landValue = 19;
     deadPeople = 0;
     starvedPeople = 0;
-  }
+    feedBushels = 0;
+    newPeople = 0;
+    uprising = false;
+    totalHarvested = 0;
+    harvestPerAcre = 0;
+    eatenBushels = 0;
+    gameOver = false;
 
- boolean gameOver() {
-    return true;
+  }
+  void gameOver() {
+    gameOver = true;
   }
   void playGame() {
     // declare local variables here: grain, population, etc. (I declared them above so this method wouldn't be so busy)
     // statements go after the declations
-    while(year < 10) { // while the year is less than 10 and gameOver != false (haven't created yet)
+    while(year < 11) { // while the year is less than 10 and gameOver != false (haven't created yet)
       printSummaryYearToYear();
 
       // Assuming land is bought,
-      int totalPurchasedLand = askHowManyAcresToBuy(price, bushels); // store the purchased land in a variable
+      int totalPurchasedLand = askHowManyAcresToBuy(landValue, bushels); // store the purchased land in a variable
       land = addedLand(land, totalPurchasedLand); // make that = the current land
       bushels -= totalPurchasedLand * landValue; // bushels must decrease at this same rate
       System.out.println("Your total land is " + land);
@@ -65,10 +79,47 @@ public class Hammurabi {
       bushels -= bushelsToPLant; // bushels must also decrease at this rate
 
       // If the plague happens,
-      int deadPeople = plagueDeaths();
+      plagueDeaths();
+
+      // If people starve,
+      int totalStarved = starvationDeaths();
+
+      // If there is an uprising,
+      boolean uprisingOccured = uprising();
+      if(uprisingOccured) {
+        gameOver();
+      }
+      population -= totalStarved; // this has to happen after uprising
+
+      // If immigrants come,
+      population += immigrants(); // adds immigrants to population
+
+      // If a harvest occurs,
+      harvest(bushelsToPLant);
+
+      // If a rat attack happens,
+      grainEatenByRats();
+
+      // When the land value increases,
+      newCostOfLand();
 
 
       year++; // year will increase when all of these methods are done
+      if (population < 15) {
+        gameOver = true;
+      }
+
+      if (gameOver || year == 10) {
+        if (uprisingOccured) {
+          System.out.println("An uprising has occured due to " + starvedPeople + " people dying. You have been thrown out of office!");
+        } else if (population < 15) {
+          System.out.println("You have " + population + "people left! You have been thrown out of office!");
+        }
+        else {
+          printEndSummary();
+        }
+        break;
+      }
     }
 
   }
@@ -88,9 +139,9 @@ public class Hammurabi {
   }
 
   // PLAYER INPUT METHODS
-  public int askHowManyAcresToBuy(int price, int bushels) {
+  public int askHowManyAcresToBuy(int landValue, int bushels) {
       int buyAcres = getNumber("How many acres would you like to buy? \n");
-      while (bushels < price * buyAcres) {
+      while (bushels < landValue * buyAcres) {
         buyAcres = getNumber("We only have " + bushels + "left!");
       }
     return buyAcres;
@@ -105,7 +156,7 @@ public class Hammurabi {
   }
 
   public int askHowMuchGrainToFeedPeople(int bushels) {
-    int feedBushels = getNumber("How much grain would you like to feed people? \n");
+    feedBushels = getNumber("How much grain would you like to feed people? \n");
     while (bushels < feedBushels) {
       feedBushels = getNumber("You can't feed them more bushels than we have!");
     }
@@ -139,14 +190,14 @@ public class Hammurabi {
   public void printSummaryYearToYear() { // anything commented out we'll get to later
     System.out.println("O Great Hammurabi!");
     System.out.println("You are in " + year + " year of your rule!");
-    // System.out.println("In the previous year, " + starvationDeaths + " starved to death.");
-    //System.out.println("In the previous year, " + immigrants + " came to the city.");
-    System.out.println("The population is now " + population + " .");
-    // System.out.println("We harvested " + harvest + " at " + bushelsPerAcre + " bushels per acre.");
-   // System.out.println("Rats destroyed); do this when you get here
+    System.out.println("In the previous year, " + starvedPeople + " starved to death.");
+    System.out.println("In the previous year, " + newPeople + " came to the city.");
+    System.out.println("The population is now " + population + ".");
+    System.out.println("We harvested " + totalHarvested + " at " + harvestPerAcre + " bushels per acre.");
+    System.out.println("Rats destroyed " + eatenBushels + " of your grain!");
     System.out.println("The plague has killed " + deadPeople + " people.");
     System.out.println("The city now owns " + land + " acres of land.");
-    System.out.println("The land is worth " + newCostOfLand() + "per acre.");
+    System.out.println("The land is worth " + landValue + "per acre.");
   }
 
 
@@ -162,31 +213,63 @@ public class Hammurabi {
     return deadPeople;
   }
 
-  public int starvationDeaths(int i, int i1) {
-    return i;
+  public int starvationDeaths() { // each person needs 20 bushels to survive
+    starvedPeople = population - (feedBushels / 20);
+
+    if (starvedPeople < 0) { // starved people cannot be negative so anything less than 0,
+      starvedPeople = 0; // we set to 0
+    }return starvedPeople;
   }
 
-  /*public boolean uprising(int i, int i1) {
-    return false;
+  public boolean uprising() { // these have to be floats because of odd numbers and decimals and things of that nature
+    float starvedPeopleFloat = starvedPeople;
+    float populationFloat = population;
+    if (starvedPeopleFloat >= populationFloat * 0.45) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-   */
-
-  public int immigrants(int i, int i1, int i2) {
-    return i;
+  public int immigrants() { // nobody will come to the city if people are starving
+    if(starvedPeople > 0) {
+      return newPeople = 0;
+    }
+    return newPeople = (20 * land + bushels) / (100 * population) + 1; // calculation that was in readMe
   }
 
-  public int harvest(int i) {
-    return i;
+  public int harvest(int plantedBushels) {
+    harvestPerAcre = rand.nextInt(0, 6) + 1;
+    if (plantedBushels > 0) {
+      totalHarvested = harvestPerAcre * plantedBushels;
+      bushels += totalHarvested;
+    }
+    return totalHarvested;
   }
 
-  /* public int grainEatenByRats(int i) {
-    return i;
-  } */
+  public int grainEatenByRats() {
+    int ratChance = rand.nextInt(0, 100);
+    if (ratChance <= 40) {
+      int ratsAteChance = rand.nextInt(10, 31);
+      eatenBushels = bushels / ratsAteChance;
+      bushels = bushels - eatenBushels;
+    }
+    return eatenBushels;
+  }
 
   public int newCostOfLand() {
-    return 0;
+    landValue = rand.nextInt(17, 24);
+    return landValue;
   }
 
-  //other methods go here
+  void printEndSummary() {
+    if (population >= 100 || bushels >= 2800 || land >= 1000) { // if you did better than what you started with
+      System.out.println("O Great Hammurabi! You have done excellent as an emperor. \n We currently have " + population + " people, " + bushels + " grain in storage, and " + land + " acres of land.");
+      System.out.println("You have truly outdone yourself! Please be our emperor forever!");
+    }
+    else {
+      System.out.println("O Great Hammurabi. Your term is complete. \n We currently have " + population + " people," + bushels + " grain in storage, and " + land + " acres of land.");
+      System.out.println("We humbly thank you for your service. You are welcome to run again next term.");
+    }
+  }
 }

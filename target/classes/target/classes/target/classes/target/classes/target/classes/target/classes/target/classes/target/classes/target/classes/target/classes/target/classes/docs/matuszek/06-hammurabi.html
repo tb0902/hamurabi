@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 13), see www.w3.org" />
+
+  <title>CIT591 Hammurabi</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" href="../style.css" type="text/css" />
+</head>
+
+<body background="background.gif">
+<p class="mainHeader"><span class="head">CIT 591 Assignment 3:
+  Hammurabi</span><br />
+  <span class="subhead">Fall 2010, David Matuszek</span></p>
+
+  <h1>Purpose of this assignment</h1>
+
+  <ul>
+    <li>To get you started using Java.</li>
+  </ul>
+
+<h1>General idea of the assignment</h1>
+
+  <p>Hammurabi is a very old computer game. Your job is to bring it into the
+  21st century by writing it in Java.</p>
+
+  <p>Here are the standard instructions for the game:</p>
+
+  <blockquote>
+    <p><b><font color="#7F0000">Congratulations, you are the newest ruler of
+    ancient Samaria, elected for a ten year term of office. Your duties are to
+    dispense food, direct farming, and buy and sell land as needed to support
+    your people. Watch out for rat infestiations and the plague! Grain is the
+    general currency, measured in bushels. The following will help you in your
+    decisions:</font></b></p>
+
+    <ul>
+      <li><b><font color="#7F0000">Each person needs at least 20 bushels of
+      grain per year to survive</font></b></li>
+
+      <li><b><font color="#7F0000">Each person can farm at most 10 acres of
+      land</font></b></li>
+
+      <li><b><font color="#7F0000">It takes 2 bushels of grain to farm an acre
+      of land</font></b></li>
+
+      <li><b><font color="#7F0000">The market price for land fluctuates
+      yearly</font></b></li>
+    </ul>
+
+    <p><b><font color="#7F0000">Rule wisely and you will be showered with
+    appreciation at the end of your term. Rule poorly and you will be kicked
+    out of office!</font></b></p>
+  </blockquote>
+
+<h1>Details</h1>
+
+  <p>Define a single class named <code>Hammurabi</code>. Use the following skeleton (but leave out the <code>//</code> comments):</p>
+  <pre class="program"><strong>package hammurabi;               <span class="comment">// package declaration
+</span>
+import java.util.Random;         <span class="comment">// imports go here</span>
+import java.util.Scanner;
+
+/**
+ * The Hammurabi game.
+ * @author <span class="variable">Your name goes here</span>
+ * @author <span class="variable">Your partner's name goes here</span>
+ */
+public class Hammurabi {         <span class="comment">// must save in a file named Hammurabi.java</span>
+    Random rand = new Random();  <span class="comment">// this is an instance variable</span>
+    Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) { <span class="comment">// required in every Java program</span>
+        new Hammurabi().playGame();
+    }
+
+    void playGame() {
+        <span class="comment">// declare local variables here: grain, population, etc.
+        // statements go after the declations</span>
+    }
+
+    <span class="comment">//other methods go here</span>
+}</strong></pre>
+  <h1>Playing the game</h1>
+<p>Here is what you start the game with:
+</p><ul>
+        <li>100 people</li>
+        <li>2800 bushels of grain in storage</li>
+        <li>1000 acres of land</li>
+        <li>Land value is 19 bushels/acre<p></p>
+</li>
+</ul>
+<p>Each year, print out a summary similar to the following:</p>
+  <pre>
+<code class="multiline">O great Hammurabi!
+You are in year 1 of your ten year rule.
+In the previous year 0 people starved to death.
+In the previous year 5 people entered the kingdom.
+The population is now 100.
+We harvested 3000 bushels at 3 bushels per acre.
+Rats destroyed 200 bushels, leaving 2800 bushels in storage.
+The city owns 1000 acres of land.
+Land is currently worth 19 bushels per acre.</code>
+</pre>
+
+  <p>The above summary represents the initial state, at the <i>beginning</i> of
+  the first year--that is, when you first take office, and before you do any of
+  the computations below). So, for example, the previous year (under a
+  different ruler) must have started with 95 people; none starved, and 5
+  entered the kingdom, so as you enter office you rule 100 people.</p>
+
+  <p>Here's what your <code>playGame</code> method needs to do each year, for up to 10 years:</p>
+
+<blockquote>
+    <p>Ask the player the following questions. These questions should be asked <strong>in this order.</strong> Do <strong>not</strong> give the player a chance to &quot;back up&quot; and change a previous answer. Each question should be asked in a separate method, and the answer returned as the value of the method, as specified below:</p>
+    <dl>
+      <dt><code>int askHowManyAcresToBuy(int price, int bushels)</code></dt>
+      <dd>Asks the player how many acres of land to buy, and returns that number. You must have enough grain to pay for your purchase. </dd>
+      <dt><code><br />
+      int askHowManyAcresToSell(int acresOwned)</code></dt>
+      <dd><b> </b>Asks the player how many acres of land to sell, and returns that number. You can't sell more than you have. <br />
+      Do not ask this question if the player is buying land; it doesn't make sense to do both in one turn.</dd>
+      <dt><code><br />
+      int askHowMuchGrainToFeedPeople(int bushels)</code></dt>
+      <dd>Ask the player how much grain to feed people, and returns that number. You can't feed them more grain than you have. You <strong>can</strong> feed them more than they need to survive. </dd>
+      <dt><code><br />
+      int askHowManyAcresToPlant(int acresOwned, int population, int bushels)</code></dt>
+      <dd>Ask the player how many acres to plant with grain, and returns that number. You must have enough acres, enough grain, and enough people to do the planting. Any grain left over goes into storage for next year.</dd>
+    </dl>
+    <p>For each
+    question, do "sanity checking"; that is, test whether the answer is
+    possible (you have enough grain, you have enough people to do the planting
+    etc.), and keep asking until you get a possible value. (For example,
+    <code>O Great Hammurabi, surely you jest! We have only 3415 bushels left!</code>)</p>
+
+    <p>Then the method needs to determine:</p>
+
+    <ol>
+      <li>If there is a plague, and how many people die from it.</li>
+      <li>How many people starved.</li>
+      <li>How many people came to the city.</li>
+      <li>How good the harvest is.</li>
+      <li>If you have a problem with rats, and how much grain they eat.</li>
+      <li>How much land costs (for deciding what to do next).</li>
+</ol>
+    <p>These can all be local variables of your <code>playGame</code> method.</p>
+    <p>Use the following methods,<strong> in this order, </strong>to make the necessary calculations:</p>
+    <dl>
+    <dt><code>int plagueDeaths(int population)</code></dt>
+    <dd>Each year, there is a 15% chance of a horrible plague. When this
+      happens, half your people die. Return the number of plague deaths (possibly zero).</dd>
+    <dt><code><br />
+    int starvationDeaths(int population, int bushelsFedToPeople)</code></dt>
+    <dd>Each person needs 20 bushels of grain to survive. If you feed them
+      more than this, they are happy, but the grain is still gone. You don't get any benefit from having happy subjects. Return the number of deaths from starvation (possibly zero).</dd>
+      <dt><code><br />
+      boolean uprising(int population, int howManyPeopleStarved)</code></dt>
+      <dd>Return <code>true</code> if more than
+        45% of the people starve. (This will cause you to be immediately thrown out of office, ending the game.)</dd>
+    <dt><code><br />
+    int immigrants(int population, int acresOwned, int grainInStorage)</code></dt>
+    <dd>Nobody will come to the city if people are starving (so don't call this method). If everyone is
+        well fed, compute how many people come to the city as: <code>(20 * <i>number of acres you have</i> + <i>amount of grain you have in
+        storage</i>) / (100 * <i>population</i>) + 1</code>.</dd>
+    <dt><code><br />
+    int harvest(int acres, <span class="error">int bushelsUsedAsSeed</span>)</code></dt>
+    <dd>Choose a random integer between 1 and 6, inclusive. Each acre that was planted
+        with seed will yield this many bushels of grain. (Example: if you planted
+      50 acres, and your number is 3, you harvest 150 bushels of grain). Return the number of bushels harvested.</dd>
+    <dt><code><br />
+    int grainEatenByRats(int bushels)</code></dt>
+    <dd>There is a 40% chance that you will have a rat infestation. When this
+        happens, rats will eat somewhere between 10% and 30% of your
+      grain.  Return the amount of grain eaten by rats (possibly zero).</dd>
+    <dt><code><br />
+    int newCostOfLand()</code></dt>
+    <dd>The price of land is random, and ranges from 17 to 23 bushels per
+        acre. Return the new price for the next set of decisions the player has to make. (The player will need this information in order to buy or sell
+      land.)</dd>
+  </dl>
+</blockquote>
+    <p>Do these computations, <i>in this order,</i> for each of ten years. Each
+    computation should be done in a separate method, and none of these methods
+    should read anything or print anything. Since most methods change the amount of grain available, you will need to keep this information in a variable so it is available to the next method that needs it. </p>
+
+    <p>When the computations are finished, call a method <code>printSummary</code> to print the
+    summary for the year. This method will take several parameters. </p>
+ 
+
+    <p>When the game ends , use a method <code>finalSummary</code> to print out a final summary, and to tell the
+  player how good a job he/she did. I'll leave the details up to you, but the
+  usual evaluation is based on how many people starved, and how many acres per
+  person you end up with.</p>
+    <p>Your <code>playGame</code> method will be quite long, but very straightforward; it does very little but call other methods. </p>
+    <p>All the required arithmetic in this program should be <b>integer</b>. You
+  do not need doubles.</p>
+
+  <p>I suggest that you first get the simplest possible version of the program
+  running and tested out (that is, leave out things like rats, plagues, and
+  immigration), then add these things one at a time to a <i>working</i>
+  program, testing as you go.</p>
+
+  <h1>Things you need to know:</h1>
+
+  <h2>Random numbers</h2>
+
+  <p>To get a random number generator, you first need to import
+  <code>java.util.Random</code> (or <code>java.util.*</code>). Then, you can
+  create a random number generator with a statement such as:</p>
+
+  <blockquote>
+    <p><code>static Random rand = new Random();</code></p>
+  </blockquote>
+
+  <p>To get a new random number in the range <code>0..n-1</code>, where
+  <code>n</code> is an <code>int</code>, call <code>rand.nextInt(n)</code>.
+  To get a new random number in the range <code>min..max</code>, use
+  the expression <code>rand.nextInt(max - min + 1) + min</code>. You
+  can use the <code>rand</code> method in statements such as</p>
+
+  <blockquote>
+    <p><code>myNewNumber = rand.nextInt(5);<br />
+    if (rand.nextInt(100) &lt; 15) { ... }</code></p>
+  </blockquote>
+
+  <p>To do something that happens <code>p</code> percent of the time, use</p>
+
+  <blockquote>
+    <p><code>if (rand.nextInt(100) &lt; p) { <i>...do something...</i>
+    }</code></p>
+  </blockquote>
+
+  <h2>Getting input  </h2>
+<p>To get a number from the player, add this method to your program:</p>
+  <pre>
+<code class="multiline"><code class="comment">/**
+ * Prints the given message (which should ask the user for some integral
+ * quantity), and returns the number entered by the user. If the user's
+ * response isn't an integer, the question is repeated until the user
+ * does give a integer response.
+ * 
+ * @param message The request to present to the user.
+ * @return The user's numeric response.
+ */
+ </code>int getNumber(String message) {
+    while (true) {
+        System.out.print(message);
+        try {
+            return scanner.nextInt();
+        }
+        catch (InputMismatchException e) {
+            System.out.println("\"" + scanner.next() + "\" isn't a number!");
+        }
+    }
+}</code>
+</pre>
+
+  <p>Here is an example of how you can use this method:</p>
+
+  <blockquote>
+    <p><code>sell = getNumber("O great Hammurabi, how many acres shall you sell?");</code></p>
+  </blockquote>
+
+  <h1>Structure of the assignment:</h1>
+
+  <ul>
+    <li>Project name: <code>Hammurabi</code></li>
+
+    <li>Package name: <code>hammurabi</code></li>
+
+    <li>Class names and method signatures:
+
+      <ul>
+        <li>
+          <code>class Hammurabi</code>
+
+          <ul>
+            <li><code>public static void main(String[] args)</code></li>
+
+            <li>Numerous other methods, as described above.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+
+    </ul>
+
+  <p>The above are requirements. <strong>The methods that do calculations</strong>, not input/output, <strong>will be tested by my test methods</strong>, so be sure to get the spelling, capitalization, and number and types of arguments correct (argument <em>names</em> are irrelevant). You may have additional  methods if you wish.</p>
+
+  <h1>Due date:</h1>
+
+  <p><strong>Thursday, October 21, before midnight.</strong> Turn in your zipped assignment via
+  <a href="https://courseweb.upenn.edu/">Blackboard</a>. Email submissions will incur the wrath of Hammurabi (and won't be graded). </p>
+
+</body>
+</html>
